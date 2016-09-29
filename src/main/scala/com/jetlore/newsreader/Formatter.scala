@@ -1,5 +1,7 @@
 package com.jetlore.newsreader
 
+import annotation.tailrec
+
 
 trait Item {
   val x:Int
@@ -15,14 +17,14 @@ class Entity(val x:Int, val y:Int) extends Item {
 
 
 class Link(val x:Int, val y:Int) extends Item {
-  def format(term:String): String = s"""<a href="$term"</a>"""
+  def format(term:String): String = s"""<a href="$term">$term</a>"""
 }
 
 
 class TwitterUser(val x:Int, val y:Int) extends Item {
   def format(term:String): String = {
     val name = term.substring(1)
-    s"""@<a href="http://twitter.com/$name"$name</a>"""
+    s"""@<a href="http://twitter.com/$name">$name</a>"""
   }
 }
 
@@ -30,13 +32,14 @@ class TwitterUser(val x:Int, val y:Int) extends Item {
 class TwitterHashTag(val x:Int, val y:Int) extends Item {
   def format(term:String): String = {
     val tag = term.substring(1)
-    s"""#<a href="https://twitter.com/hashtag/$tag"$tag</a>"""
+    s"""#<a href="http://twitter.com/hashtag/$tag">$tag</a>"""
   }
 }
 
 
 object Formatter {
 
+  @tailrec
   def formatIter(input:String, result:String, items:List[Item], pos:Int):String = {
     items match {
       case Nil => result + input.substring(pos)
@@ -52,19 +55,6 @@ object Formatter {
   def format(input:String, items:List[Item]):String = {
     val items_sorted = items.sortWith(_.x < _.x)
     formatIter(input, "", items_sorted, 0)
-  }
-
-  def main(args:Array[String]) = {
-    val input = "Obama visited Facebook headquarters: http://bit.ly/xyz @elversatile see also #obama #facebook"
-    val result:String = format(input, List(
-      new Link(37, 54),
-      new Entity(0, 5),
-      new Entity(14, 22),
-      new TwitterHashTag(77, 83),
-      new TwitterHashTag(84, 93),
-      new TwitterUser(55, 67)
-    ))
-    println(result)
   }
 
 }
