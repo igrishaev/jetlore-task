@@ -1,3 +1,5 @@
+package com.jetlore.newsreader
+
 
 trait Item {
   val x:Int
