@@ -35,10 +35,6 @@ class TwitterHashTag(val x:Int, val y:Int) extends Item {
 
 object Formatter {
 
-  // todo traversable
-  // todo: sort
-  // todo tail recur
-
   def formatIter(input:String, result:String, items:List[Item], pos:Int):String = {
     items match {
       case Nil => result + input.substring(pos)
@@ -51,17 +47,20 @@ object Formatter {
     }
   }
 
-  def format(input:String, items:List[Item]):String = formatIter(input, "", items, 0)
+  def format(input:String, items:List[Item]):String = {
+    val items_sorted = items.sortWith(_.x < _.x)
+    formatIter(input, "", items_sorted, 0)
+  }
 
   def main(args:Array[String]) = {
     val input = "Obama visited Facebook headquarters: http://bit.ly/xyz @elversatile see also #obama #facebook"
     val result:String = format(input, List(
+      new Link(37, 54),
       new Entity(0, 5),
       new Entity(14, 22),
-      new Link(37, 54),
-      new TwitterUser(55, 67),
       new TwitterHashTag(77, 83),
-      new TwitterHashTag(84, 93)
+      new TwitterHashTag(84, 93),
+      new TwitterUser(55, 67)
     ))
     println(result)
   }
