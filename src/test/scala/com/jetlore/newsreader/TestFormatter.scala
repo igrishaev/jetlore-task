@@ -1,63 +1,53 @@
 package com.jetlore.newsreader
 
-import org.scalatest.FunSpec
-import scala.collection.mutable.Stack
+import org.scalatest.FunSuite
 
 
-class TestFormatter extends FunSpec {
+class TestFormatter extends FunSuite {
 
-  describe("A Stack") {
-
-    it("should pop values in last-in-first-out order") {
-      val stack = new Stack[Int]
-      stack.push(1)
-      stack.push(2)
-      assert(stack.pop() === 2)
-      assert(stack.pop() === 1)
-    }
-
-    it("should throw NoSuchElementException if an empty stack is popped") {
-      val emptyStack = new Stack[Int]
-      intercept[NoSuchElementException] {
-        emptyStack.pop()
-      }
-    }
+  test("test entity") {
+    val result = Formatter.format("test", List(new Entity(0, 4)))
+    assert(result == "<strong>test</strong>")
   }
+
+  test("test link") {
+    val result = Formatter.format("test", List(new Link(0, 4)))
+    assert(result == """<a href="test">test</a>""")
+  }
+
+  test("test twitter user") {
+    val result = Formatter.format("@test", List(new TwitterUser(0, 5)))
+    assert(result == """@<a href="http://twitter.com/test">test</a>""")
+  }
+
+  test("test twitter hashtag") {
+    val result = Formatter.format("#test", List(new TwitterHashTag(0, 5)))
+    assert(result == """#<a href="http://twitter.com/hashtag/test">test</a>""")
+  }
+
+  test("test complex") {
+    val input = "Obama visited Facebook headquarters: http://bit.ly/xyz @elversatile see also #obama #facebook"
+    val result = Formatter.format(input, List(
+      new Link(37, 54),
+      new Entity(0, 5),
+      new Entity(14, 22),
+      new TwitterHashTag(77, 83),
+      new TwitterHashTag(84, 93),
+      new TwitterUser(55, 67)
+    ))
+    assert(result == """<strong>Obama</strong> visited <strong>Facebook</strong> headquarters: <a href="http://bit.ly/xyz">http://bit.ly/xyz</a> @<a href="http://twitter.com/elversatile">elversatile</a> see also #<a href="http://twitter.com/hashtag/obama">obama</a> #<a href="http://twitter.com/hashtag/facebook">facebook</a>""")
+  }
+
+  test("test items order") {
+    val input = "@foo #bar BAZ"
+    val items = List(
+      new TwitterUser(0, 4),
+      new TwitterHashTag(5, 9),
+      new Entity(10, 13)
+    )
+    val result1 = Formatter.format(input, items)
+    val result2 = Formatter.format(input, util.Random.shuffle(items))
+    assert(result1 == result2)
+  }
+
 }
-
-// import collection.mutable.Stack
-// import org.scalatest._
-
-// class StackSpec extends FlatSpec {
-
-//   "A Stack" should "pop values in last-in-first-out order" in {
-//     val stack = new Stack[Int]
-//     stack.push(1)
-//     stack.push(2)
-//     assert(stack.pop() === 2)
-//     assert(stack.pop() === 1)
-//   }
-
-//   it should "throw NoSuchElementException if an empty stack is popped" in {
-//     val emptyStack = new Stack[String]
-//     assertThrows[NoSuchElementException] {
-//       emptyStack.pop()
-//     }
-//   }
-// }
-
-// import org.scalatest.FunSuite
-// import com.jetlore.newsreader.Formatter
-
-
-// class TestFormatter extends FunSuite {
-
-//   test("test") {
-//     assert True
-//   }
-
-//   test("test2") {
-//     assert True
-//   }
-
-// }
