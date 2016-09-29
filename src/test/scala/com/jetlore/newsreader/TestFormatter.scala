@@ -35,7 +35,11 @@ class TestFormatter extends FunSuite {
       new TwitterHashTag(84, 93),
       new TwitterUser(55, 67)
     ))
-    assert(result == """<strong>Obama</strong> visited <strong>Facebook</strong> headquarters: <a href="http://bit.ly/xyz">http://bit.ly/xyz</a> @<a href="http://twitter.com/elversatile">elversatile</a> see also #<a href="http://twitter.com/hashtag/obama">obama</a> #<a href="http://twitter.com/hashtag/facebook">facebook</a>""")
+    assert(result == """<strong>Obama</strong> visited <strong>Facebook</strong>
+ headquarters: <a href="http://bit.ly/xyz">http://bit.ly/xyz</a>
+ @<a href="http://twitter.com/elversatile">elversatile</a>
+ see also #<a href="http://twitter.com/hashtag/obama">obama</a>
+ #<a href="http://twitter.com/hashtag/facebook">facebook</a>""".replaceAll("\n", ""))
   }
 
   test("test items order") {
