@@ -1,6 +1,6 @@
 ### Input Example
 
-> Obama visited Facebook headquarters: http://bit.ly/xyz @elversatile
+`Obama visited Facebook headquarters: http://bit.ly/xyz @elversatile`
 
 ```
 positions 14 through 22 → Entity
@@ -11,4 +11,4 @@ positions 37 through 47 → Link
 
 ### Output Example
 
-> <strong>Obama</strong> visited <strong>Facebook</strong> headquarters: <a href=”http://bit.ly/xyz”>http://bit.ly/xyz</a> @<a href=”http://twitter.com/elversatile”>elversatile</a>
+`<strong>Obama</strong> visited <strong>Facebook</strong> headquarters: <a href=”http://bit.ly/xyz”>http://bit.ly/xyz</a> @<a href=”http://twitter.com/elversatile”>elversatile</a>`
